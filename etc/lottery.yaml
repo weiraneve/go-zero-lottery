@@ -1,0 +1,9 @@
+Name: go-zero-lottery
+Host: 0.0.0.0
+Port: 8888
+
+MySql:
+  Addr: "127.0.0.1:3306"
+  User: "root"
+  Password: "123456"
+  Database: "lottery"
