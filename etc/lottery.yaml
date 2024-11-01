@@ -7,3 +7,6 @@ MySql:
   User: "root"
   Password: "123456"
   Database: "lottery"
+
+Cache:
+  - Host: "127.0.0.1:6379"
