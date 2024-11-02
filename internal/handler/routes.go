@@ -15,9 +15,10 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 	server.AddRoutes(
 		[]rest.Route{
 			{
-				Method:  http.MethodGet,
-				Path:    "/from/:name",
-				Handler: DemoHandler(serverCtx),
+				// Pick a team by encryptCode
+				Method:  http.MethodPost,
+				Path:    "/",
+				Handler: PickHandler(serverCtx),
 			},
 		},
 	)
