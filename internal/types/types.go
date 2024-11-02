@@ -3,10 +3,19 @@
 
 package types
 
-type Request struct {
-	Name string `path:"name,options=you|me"`
+type LogItem struct {
+	TeamId    int64  `json:"teamId"`
+	PickGroup string `json:"pickGroup"`
+	Time      string `json:"time"`
 }
 
-type Response struct {
-	Message string `json:"message"`
+type PickRequest struct {
+	EncryptCode string `json:"encryptCode"`
+}
+
+type PickResponse struct {
+	TeamId int64     `json:"teamId"`
+	Data   string    `json:"data"`
+	Time   string    `json:"time"`
+	Logs   []LogItem `json:"logs"`
 }

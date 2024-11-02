@@ -9,21 +9,22 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type DemoLogic struct {
+type PickLogic struct {
 	logx.Logger
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 }
 
-func NewDemoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *DemoLogic {
-	return &DemoLogic{
+// Pick a team by encryptCode
+func NewPickLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PickLogic {
+	return &PickLogic{
 		Logger: logx.WithContext(ctx),
 		ctx:    ctx,
 		svcCtx: svcCtx,
 	}
 }
 
-func (l *DemoLogic) Demo(req *types.Request) (resp *types.Response, err error) {
+func (l *PickLogic) Pick(req *types.PickRequest) (resp *types.PickResponse, err error) {
 	// todo: add your logic here and delete this line
 
 	return
