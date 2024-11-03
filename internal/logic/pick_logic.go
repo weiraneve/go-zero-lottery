@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"strings"
 
 	"lottery/internal/svc"
 	"lottery/internal/types"
@@ -25,7 +26,19 @@ func NewPickLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PickLogic {
 }
 
 func (l *PickLogic) Pick(req *types.PickRequest) (resp *types.PickResponse, err error) {
-	// todo: add your logic here and delete this line
+	heroes, err := l.svcCtx.HeroModel.FindGroupIsNotPick(l.ctx)
+	if err != nil {
+		return nil, err
+	}
 
-	return
+	names := make([]string, len(heroes))
+	for i, hero := range heroes {
+		names[i] = hero.Name
+	}
+
+	result := strings.Join(names, ",")
+
+	return &types.PickResponse{
+		Data: result,
+	}, nil
 }
