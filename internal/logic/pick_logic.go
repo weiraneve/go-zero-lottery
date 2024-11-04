@@ -26,6 +26,8 @@ func NewPickLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PickLogic {
 }
 
 func (l *PickLogic) Pick(req *types.PickRequest) (resp *types.PickResponse, err error) {
+	_, err = l.svcCtx.TeamModel.FindOneByEncryptCode(l.ctx, req.EncryptCode)
+
 	heroes, err := l.svcCtx.HeroModel.FindGroupIsNotPick(l.ctx)
 	if err != nil {
 		return nil, err

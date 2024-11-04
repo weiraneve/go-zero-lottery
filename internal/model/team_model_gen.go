@@ -32,6 +32,7 @@ type (
 		FindOne(ctx context.Context, id int64) (*Team, error)
 		Update(ctx context.Context, data *Team) error
 		Delete(ctx context.Context, id int64) error
+		FindOneByEncryptCode(ctx context.Context, encrypt_code string) (*Team, error)
 	}
 
 	defaultTeamModel struct {
@@ -79,6 +80,10 @@ func (m *defaultTeamModel) FindOne(ctx context.Context, id int64) (*Team, error)
 	default:
 		return nil, err
 	}
+}
+
+func (m *defaultTeamModel) FindOneByEncryptCode(ctx context.Context, encrypt_code string) (*Team, error) {
+	return nil, nil
 }
 
 func (m *defaultTeamModel) Insert(ctx context.Context, data *Team) (sql.Result, error) {
