@@ -53,6 +53,7 @@ type (
 func newHeroModel(conn sqlx.SqlConn, c cache.CacheConf, opts ...cache.Option) *defaultHeroModel {
 	return &defaultHeroModel{
 		CachedConn: sqlc.NewConn(conn, c, opts...),
+		conn:       conn,
 		table:      "`hero`",
 	}
 }
@@ -93,6 +94,10 @@ func (m *defaultHeroModel) Insert(ctx context.Context, data *Hero) (sql.Result, 
 }
 
 func (m *defaultHeroModel) FindGroupIsNotPick(ctx context.Context) ([]*Hero, error) {
+	if m == nil || m.conn == nil {
+		return nil, errors.New("model or database connection is nil")
+	}
+
 	var heroes []*Hero
 	query := fmt.Sprintf("select %s from %s where is_pick = 0 limit 2 for update",
 		heroRows, m.table)
