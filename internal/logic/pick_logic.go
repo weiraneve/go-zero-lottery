@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"errors"
 	"strings"
 
 	"lottery/internal/svc"
@@ -26,7 +27,14 @@ func NewPickLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PickLogic {
 }
 
 func (l *PickLogic) Pick(req *types.PickRequest) (resp *types.PickResponse, err error) {
-	_, err = l.svcCtx.TeamModel.FindOneByEncryptCode(l.ctx, req.EncryptCode)
+	team, err := l.svcCtx.TeamModel.FindOneByEncryptCode(l.ctx, req.EncryptCode)
+	if err != nil {
+		return nil, err
+	}
+
+	if team == nil {
+		return nil, errors.New("team not found, please check your encryptCode")
+	}
 
 	heroes, err := l.svcCtx.HeroModel.FindGroupIsNotPick(l.ctx)
 	if err != nil {
