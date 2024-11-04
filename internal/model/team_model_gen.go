@@ -37,6 +37,7 @@ type (
 
 	defaultTeamModel struct {
 		sqlc.CachedConn
+		conn  sqlx.SqlConn
 		table string
 	}
 
@@ -52,6 +53,7 @@ type (
 func newTeamModel(conn sqlx.SqlConn, c cache.CacheConf, opts ...cache.Option) *defaultTeamModel {
 	return &defaultTeamModel{
 		CachedConn: sqlc.NewConn(conn, c, opts...),
+		conn:       conn,
 		table:      "`team`",
 	}
 }
