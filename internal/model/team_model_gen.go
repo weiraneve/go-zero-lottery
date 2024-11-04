@@ -85,7 +85,17 @@ func (m *defaultTeamModel) FindOne(ctx context.Context, id int64) (*Team, error)
 }
 
 func (m *defaultTeamModel) FindOneByEncryptCode(ctx context.Context, encrypt_code string) (*Team, error) {
-	return nil, nil
+	query := fmt.Sprintf("select %s from %s where `encrypt_code` = ?", teamRows, m.table)
+	var resp Team
+	err := m.conn.QueryRowCtx(ctx, &resp, query, encrypt_code)
+	switch {
+	case err == sqlx.ErrNotFound:
+		return nil, ErrNotFound
+	case err != nil:
+		return nil, err
+	default:
+		return &resp, nil
+	}
 }
 
 func (m *defaultTeamModel) Insert(ctx context.Context, data *Team) (sql.Result, error) {
