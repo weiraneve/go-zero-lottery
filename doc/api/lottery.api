@@ -1,0 +1,10 @@
+syntax = "v1"
+
+import "web/pick.api"
+
+info (
+	desc:   "lottery api"
+	author: "steveay"
+	email:  "907221539@gmail.com"
+)
+
