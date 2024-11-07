@@ -25,3 +25,8 @@ api:
 .PHONY: db
 db:
 	goctl model mysql datasource -url="${user}:${pwd}@tcp(${host})/${table}" -table="${table}" --dir internal/model --strict --style go_zero ${cache}
+
+.PHONY: build
+# build exec file
+build:
+	mkdir -p bin/ && CGO_ENABLED=1 go build -ldflags="-s -w" -tags no_k8s -o ./bin/ ./...
