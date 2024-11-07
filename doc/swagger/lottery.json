@@ -1,0 +1,119 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "",
+    "description": "lottery api",
+    "version": ""
+  },
+  "basePath": "/api",
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/": {
+      "post": {
+        "summary": "Pick a team by encryptCode",
+        "operationId": "Pick",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/PickResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PickRequest"
+            }
+          }
+        ],
+        "tags": [
+          "pick"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "LogItem": {
+      "type": "object",
+      "properties": {
+        "teamId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "pickGroup": {
+          "type": "string"
+        },
+        "time": {
+          "type": "string"
+        }
+      },
+      "title": "LogItem",
+      "required": [
+        "teamId",
+        "pickGroup",
+        "time"
+      ]
+    },
+    "PickRequest": {
+      "type": "object",
+      "properties": {
+        "encryptCode": {
+          "type": "string"
+        }
+      },
+      "title": "PickRequest",
+      "required": [
+        "encryptCode"
+      ]
+    },
+    "PickResponse": {
+      "type": "object",
+      "properties": {
+        "teamId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "data": {
+          "type": "string"
+        },
+        "time": {
+          "type": "string"
+        },
+        "logs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/LogItem"
+          }
+        }
+      },
+      "title": "PickResponse",
+      "required": [
+        "teamId",
+        "data",
+        "time",
+        "logs"
+      ]
+    }
+  },
+  "securityDefinitions": {
+    "apiKey": {
+      "type": "apiKey",
+      "description": "Enter JWT Bearer token **_only_**",
+      "name": "Authorization",
+      "in": "header"
+    }
+  }
+}
