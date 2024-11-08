@@ -2,6 +2,7 @@ project ?= lottery
 host ?= 127.0.0.1:3306
 user ?= root
 pwd ?=
+database ?=
 table ?=
 cache ?=
 
@@ -24,7 +25,7 @@ api:
 
 .PHONY: db
 db:
-	goctl model mysql datasource -url="${user}:${pwd}@tcp(${host})/${table}" -table="${table}" --dir internal/model --strict --style go_zero ${cache}
+	goctl model mysql datasource -url="${user}:${pwd}@tcp(${host})/${database}" -table="${table}" --dir internal/model --strict --style go_zero ${cache}
 
 .PHONY: build
 # build exec file
