@@ -7,7 +7,6 @@ package model
 import (
 	"context"
 	"database/sql"
-	"errors"
 	"fmt"
 	"strings"
 
@@ -33,7 +32,6 @@ type (
 		FindOne(ctx context.Context, id int64) (*Hero, error)
 		Update(ctx context.Context, data *Hero) error
 		Delete(ctx context.Context, id int64) error
-		FindGroupIsNotPick(ctx context.Context) ([]*Hero, error)
 	}
 
 	defaultHeroModel struct {
@@ -91,25 +89,6 @@ func (m *defaultHeroModel) Insert(ctx context.Context, data *Hero) (sql.Result, 
 		return conn.ExecCtx(ctx, query, data.Name, data.Line, data.IsPick)
 	}, lotteryHeroIdKey)
 	return ret, err
-}
-
-func (m *defaultHeroModel) FindGroupIsNotPick(ctx context.Context) ([]*Hero, error) {
-	if m == nil || m.conn == nil {
-		return nil, errors.New("model or database connection is nil")
-	}
-
-	var heroes []*Hero
-	query := fmt.Sprintf("select %s from %s where is_pick = 0 limit 2 for update",
-		heroRows, m.table)
-	err := m.conn.QueryRowsCtx(ctx, &heroes, query)
-	if err != nil {
-		return nil, err
-	}
-
-	if len(heroes) < 2 {
-		return nil, errors.New("not enough available heroes")
-	}
-	return heroes, nil
 }
 
 func (m *defaultHeroModel) Update(ctx context.Context, data *Hero) error {
