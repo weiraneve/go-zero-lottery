@@ -14,9 +14,4 @@ See [lottery sql info](./doc/sql/lottery.sql) for lottery sql info
 
 ## usages
 
-When you config your mysql config, then:
-```
-go run lottery.go -f etc/lottery.yaml
-```
-
-When you update .api file, then you can run`goctl api go -api pick.api -dir .`
+You can use [](./Makefile) command to init project.
