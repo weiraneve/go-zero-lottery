@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/zeromicro/go-zero/core/stores/cache"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
 )
 
@@ -43,8 +42,8 @@ func (m *defaultHeroModel) FindGroupIsNotPick(ctx context.Context) ([]*Hero, err
 }
 
 // NewHeroModel returns a model for the database table.
-func NewHeroModel(conn sqlx.SqlConn, c cache.CacheConf, opts ...cache.Option) HeroModel {
+func NewHeroModel(conn sqlx.SqlConn) HeroModel {
 	return &customHeroModel{
-		defaultHeroModel: newHeroModel(conn, c, opts...),
+		defaultHeroModel: newHeroModel(conn),
 	}
 }

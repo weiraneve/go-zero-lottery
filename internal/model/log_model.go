@@ -1,7 +1,6 @@
 package model
 
 import (
-	"github.com/zeromicro/go-zero/core/stores/cache"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
 )
 
@@ -20,8 +19,8 @@ type (
 )
 
 // NewLogModel returns a model for the database table.
-func NewLogModel(conn sqlx.SqlConn, c cache.CacheConf, opts ...cache.Option) LogModel {
+func NewLogModel(conn sqlx.SqlConn) LogModel {
 	return &customLogModel{
-		defaultLogModel: newLogModel(conn, c, opts...),
+		defaultLogModel: newLogModel(conn),
 	}
 }

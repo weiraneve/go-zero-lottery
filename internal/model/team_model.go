@@ -3,7 +3,6 @@ package model
 import (
 	"context"
 	"fmt"
-	"github.com/zeromicro/go-zero/core/stores/cache"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
 )
 
@@ -37,8 +36,8 @@ func (m *defaultTeamModel) FindOneByEncryptCode(ctx context.Context, encrypt_cod
 }
 
 // NewTeamModel returns a model for the database table.
-func NewTeamModel(conn sqlx.SqlConn, c cache.CacheConf, opts ...cache.Option) TeamModel {
+func NewTeamModel(conn sqlx.SqlConn) TeamModel {
 	return &customTeamModel{
-		defaultTeamModel: newTeamModel(conn, c, opts...),
+		defaultTeamModel: newTeamModel(conn),
 	}
 }

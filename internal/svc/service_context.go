@@ -18,8 +18,8 @@ func NewServiceContext(c config.Config) *ServiceContext {
 
 	return &ServiceContext{
 		Config:    c,
-		HeroModel: model.NewHeroModel(conn, c.Cache),
-		TeamModel: model.NewTeamModel(conn, c.Cache),
-		LogModel:  model.NewLogModel(conn, c.Cache),
+		HeroModel: model.NewHeroModel(conn),
+		TeamModel: model.NewTeamModel(conn),
+		LogModel:  model.NewLogModel(conn),
 	}
 }

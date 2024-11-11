@@ -12,8 +12,6 @@ import (
 	"time"
 
 	"github.com/zeromicro/go-zero/core/stores/builder"
-	"github.com/zeromicro/go-zero/core/stores/cache"
-	"github.com/zeromicro/go-zero/core/stores/sqlc"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
 	"github.com/zeromicro/go-zero/core/stringx"
 )
@@ -23,8 +21,6 @@ var (
 	logRows                = strings.Join(logFieldNames, ",")
 	logRowsExpectAutoSet   = strings.Join(stringx.Remove(logFieldNames, "`id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), ",")
 	logRowsWithPlaceHolder = strings.Join(stringx.Remove(logFieldNames, "`id`", "`create_at`", "`create_time`", "`created_at`", "`update_at`", "`update_time`", "`updated_at`"), "=?,") + "=?"
-
-	cacheLotteryLogIdPrefix = "cache:lottery:log:id:"
 )
 
 type (
@@ -36,7 +32,7 @@ type (
 	}
 
 	defaultLogModel struct {
-		sqlc.CachedConn
+		conn  sqlx.SqlConn
 		table string
 	}
 
@@ -48,33 +44,27 @@ type (
 	}
 )
 
-func newLogModel(conn sqlx.SqlConn, c cache.CacheConf, opts ...cache.Option) *defaultLogModel {
+func newLogModel(conn sqlx.SqlConn) *defaultLogModel {
 	return &defaultLogModel{
-		CachedConn: sqlc.NewConn(conn, c, opts...),
-		table:      "`log`",
+		conn:  conn,
+		table: "`log`",
 	}
 }
 
 func (m *defaultLogModel) Delete(ctx context.Context, id int64) error {
-	lotteryLogIdKey := fmt.Sprintf("%s%v", cacheLotteryLogIdPrefix, id)
-	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("delete from %s where `id` = ?", m.table)
-		return conn.ExecCtx(ctx, query, id)
-	}, lotteryLogIdKey)
+	query := fmt.Sprintf("delete from %s where `id` = ?", m.table)
+	_, err := m.conn.ExecCtx(ctx, query, id)
 	return err
 }
 
 func (m *defaultLogModel) FindOne(ctx context.Context, id int64) (*Log, error) {
-	lotteryLogIdKey := fmt.Sprintf("%s%v", cacheLotteryLogIdPrefix, id)
+	query := fmt.Sprintf("select %s from %s where `id` = ? limit 1", logRows, m.table)
 	var resp Log
-	err := m.QueryRowCtx(ctx, &resp, lotteryLogIdKey, func(ctx context.Context, conn sqlx.SqlConn, v any) error {
-		query := fmt.Sprintf("select %s from %s where `id` = ? limit 1", logRows, m.table)
-		return conn.QueryRowCtx(ctx, v, query, id)
-	})
+	err := m.conn.QueryRowCtx(ctx, &resp, query, id)
 	switch err {
 	case nil:
 		return &resp, nil
-	case sqlc.ErrNotFound:
+	case sqlx.ErrNotFound:
 		return nil, ErrNotFound
 	default:
 		return nil, err
@@ -82,30 +72,15 @@ func (m *defaultLogModel) FindOne(ctx context.Context, id int64) (*Log, error) {
 }
 
 func (m *defaultLogModel) Insert(ctx context.Context, data *Log) (sql.Result, error) {
-	lotteryLogIdKey := fmt.Sprintf("%s%v", cacheLotteryLogIdPrefix, data.Id)
-	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?)", m.table, logRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.TeamId, data.PickGroup, data.Time)
-	}, lotteryLogIdKey)
+	query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?)", m.table, logRowsExpectAutoSet)
+	ret, err := m.conn.ExecCtx(ctx, query, data.TeamId, data.PickGroup, data.Time)
 	return ret, err
 }
 
 func (m *defaultLogModel) Update(ctx context.Context, data *Log) error {
-	lotteryLogIdKey := fmt.Sprintf("%s%v", cacheLotteryLogIdPrefix, data.Id)
-	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, logRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.TeamId, data.PickGroup, data.Time, data.Id)
-	}, lotteryLogIdKey)
+	query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, logRowsWithPlaceHolder)
+	_, err := m.conn.ExecCtx(ctx, query, data.TeamId, data.PickGroup, data.Time, data.Id)
 	return err
-}
-
-func (m *defaultLogModel) formatPrimary(primary any) string {
-	return fmt.Sprintf("%s%v", cacheLotteryLogIdPrefix, primary)
-}
-
-func (m *defaultLogModel) queryPrimary(ctx context.Context, conn sqlx.SqlConn, v, primary any) error {
-	query := fmt.Sprintf("select %s from %s where `id` = ? limit 1", logRows, m.table)
-	return conn.QueryRowCtx(ctx, v, query, primary)
 }
 
 func (m *defaultLogModel) tableName() string {
