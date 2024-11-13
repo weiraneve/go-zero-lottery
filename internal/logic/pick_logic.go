@@ -38,7 +38,7 @@ func (l *PickLogic) Pick(req *types.PickRequest) (resp *types.PickResponse, err 
 
 	heroes, err := l.svcCtx.HeroModel.FindGroupIsNotPick(l.ctx)
 	if err != nil {
-		return nil, err
+		return nil, errors.New("heroes not found")
 	}
 
 	names := make([]string, len(heroes))
