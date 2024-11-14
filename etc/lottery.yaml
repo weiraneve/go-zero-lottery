@@ -10,3 +10,13 @@ MySql:
 
 Cache:
   - Host: "127.0.0.1:6379"
+
+Log:
+  Mode: "file"
+  Encoding: "json"
+  Path: "logs"
+  Level: "debug"
+  Compress: true
+  KeepDays: 7
+  MaxBackups: 3
+  MaxSize: 100
