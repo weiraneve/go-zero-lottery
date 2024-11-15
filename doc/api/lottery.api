@@ -1,6 +1,7 @@
 syntax = "v1"
 
 import "web/pick.api"
+import "web/log.api"
 
 info (
 	desc:   "lottery api"

@@ -19,16 +19,10 @@ type (
 	PickRequest {
 		EncryptCode string `json:"encryptCode"`
 	}
-	LogItem {
-		TeamId    int64  `json:"teamId"`
-		PickGroup string `json:"pickGroup"`
-		Time      string `json:"time"`
-	}
 	PickResponse {
-		TeamId int64     `json:"teamId"`
-		Data   string    `json:"data"`
-		Time   string    `json:"time"`
-		Logs   []LogItem `json:"logs"`
+		TeamId int64  `json:"teamId"`
+		Data   string `json:"data"`
+		Time   string `json:"time"`
 	}
 )
 

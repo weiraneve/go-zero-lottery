@@ -1,0 +1,32 @@
+syntax = "v1"
+
+info (
+	title:   "Log API"
+	desc:    "Get log by lottery service"
+	author:  "steveay"
+	version: "1.0"
+)
+
+service lottery {
+	@doc (
+		summary: "Pick a team by encryptCode"
+	)
+	@handler Log
+	post /log (LogRequest) returns (LogResponse)
+}
+
+type (
+	LogRequest {
+		TeamId      int64  `json:"teamId"`
+		EncryptCode string `json:"encryptCode"`
+	}
+	LogItem {
+		TeamId    int64  `json:"teamId"`
+		PickGroup string `json:"pickGroup"`
+		Time      string `json:"time"`
+	}
+	LogResponse {
+		Logs []LogItem `json:"logs"`
+	}
+)
+
