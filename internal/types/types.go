@@ -9,13 +9,21 @@ type LogItem struct {
 	Time      string `json:"time"`
 }
 
+type LogRequest struct {
+	TeamId      int64  `json:"teamId"`
+	EncryptCode string `json:"encryptCode"`
+}
+
+type LogResponse struct {
+	Logs []LogItem `json:"logs"`
+}
+
 type PickRequest struct {
 	EncryptCode string `json:"encryptCode"`
 }
 
 type PickResponse struct {
-	TeamId int64     `json:"teamId"`
-	Data   string    `json:"data"`
-	Time   string    `json:"time"`
-	Logs   []LogItem `json:"logs"`
+	TeamId int64  `json:"teamId"`
+	Data   string `json:"data"`
+	Time   string `json:"time"`
 }

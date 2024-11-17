@@ -43,6 +43,33 @@
           "lottery"
         ]
       }
+    },
+    "/log": {
+      "post": {
+        "summary": "Pick a team by encryptCode",
+        "operationId": "Log",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/LogResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/LogRequest"
+            }
+          }
+        ],
+        "tags": [
+          "lottery"
+        ]
+      }
     }
   },
   "definitions": {
@@ -65,6 +92,38 @@
         "teamId",
         "pickGroup",
         "time"
+      ]
+    },
+    "LogRequest": {
+      "type": "object",
+      "properties": {
+        "teamId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "encryptCode": {
+          "type": "string"
+        }
+      },
+      "title": "LogRequest",
+      "required": [
+        "teamId",
+        "encryptCode"
+      ]
+    },
+    "LogResponse": {
+      "type": "object",
+      "properties": {
+        "logs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/LogItem"
+          }
+        }
+      },
+      "title": "LogResponse",
+      "required": [
+        "logs"
       ]
     },
     "PickRequest": {
@@ -91,20 +150,13 @@
         },
         "time": {
           "type": "string"
-        },
-        "logs": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/LogItem"
-          }
         }
       },
       "title": "PickResponse",
       "required": [
         "teamId",
         "data",
-        "time",
-        "logs"
+        "time"
       ]
     }
   },

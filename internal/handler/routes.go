@@ -22,4 +22,15 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			},
 		},
 	)
+
+	server.AddRoutes(
+		[]rest.Route{
+			{
+				// Pick a team by encryptCode
+				Method:  http.MethodPost,
+				Path:    "/log",
+				Handler: LogHandler(serverCtx),
+			},
+		},
+	)
 }
