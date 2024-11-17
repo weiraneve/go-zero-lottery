@@ -12,6 +12,8 @@ See [the API documentation](./doc/api) for more info.
 
 See [lottery sql info](./doc/sql/lottery.sql) for lottery sql info
 
+`mysql -u root -p lottery < XXX.sql`
+
 ## usages
 
 You can use [](./Makefile) command to init project.
