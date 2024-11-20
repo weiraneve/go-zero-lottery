@@ -22,7 +22,7 @@ type (
 	}
 )
 
-func (m *defaultHeroModel) FindGroupIsNotPick(ctx context.Context) ([]*Hero, error) {
+func (m *customHeroModel) FindGroupIsNotPick(ctx context.Context) ([]*Hero, error) {
 	if m == nil || m.conn == nil {
 		return nil, errors.New("model or database connection is nil")
 	}
