@@ -17,8 +17,8 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			{
 				// Pick a team by encryptCode
 				Method:  http.MethodPost,
-				Path:    "/",
-				Handler: PickHandler(serverCtx),
+				Path:    "/log",
+				Handler: LogHandler(serverCtx),
 			},
 		},
 	)
@@ -28,8 +28,8 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			{
 				// Pick a team by encryptCode
 				Method:  http.MethodPost,
-				Path:    "/log",
-				Handler: LogHandler(serverCtx),
+				Path:    "/",
+				Handler: PickHandler(serverCtx),
 			},
 		},
 	)
