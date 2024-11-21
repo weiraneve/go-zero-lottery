@@ -58,8 +58,8 @@ CREATE TABLE `log` (
   `team_id` int NOT NULL COMMENT '队伍id',
   `pick_group` varchar(100) CHARACTER SET utf8mb4  NOT NULL COMMENT '抽取组合',
   `time` datetime NOT NULL COMMENT '记录时间',
-  PRIMARY KEY (`id`) USING BTREE
-  UNIQUE KEY (`team_id`),
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE KEY (`team_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 
 CREATE TABLE `team` (
