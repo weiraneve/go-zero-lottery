@@ -27,6 +27,7 @@ type (
 	logModel interface {
 		Insert(ctx context.Context, data *Log) (sql.Result, error)
 		FindOne(ctx context.Context, id int64) (*Log, error)
+		FindOneByTeamId(ctx context.Context, teamId int64) (*Log, error)
 		Update(ctx context.Context, data *Log) error
 		Delete(ctx context.Context, id int64) error
 	}
@@ -71,15 +72,29 @@ func (m *defaultLogModel) FindOne(ctx context.Context, id int64) (*Log, error) {
 	}
 }
 
+func (m *defaultLogModel) FindOneByTeamId(ctx context.Context, teamId int64) (*Log, error) {
+	var resp Log
+	query := fmt.Sprintf("select %s from %s where `team_id` = ? limit 1", logRows, m.table)
+	err := m.conn.QueryRowCtx(ctx, &resp, query, teamId)
+	switch err {
+	case nil:
+		return &resp, nil
+	case sqlx.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
+}
+
 func (m *defaultLogModel) Insert(ctx context.Context, data *Log) (sql.Result, error) {
 	query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?)", m.table, logRowsExpectAutoSet)
 	ret, err := m.conn.ExecCtx(ctx, query, data.TeamId, data.PickGroup, data.Time)
 	return ret, err
 }
 
-func (m *defaultLogModel) Update(ctx context.Context, data *Log) error {
+func (m *defaultLogModel) Update(ctx context.Context, newData *Log) error {
 	query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, logRowsWithPlaceHolder)
-	_, err := m.conn.ExecCtx(ctx, query, data.TeamId, data.PickGroup, data.Time, data.Id)
+	_, err := m.conn.ExecCtx(ctx, query, newData.TeamId, newData.PickGroup, newData.Time, newData.Id)
 	return err
 }
 
