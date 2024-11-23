@@ -2,6 +2,7 @@ package model
 
 import (
 	"context"
+	"errors"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
 )
 
@@ -22,6 +23,10 @@ type (
 )
 
 func (m *customLogModel) FindOneByEncryptCode(ctx context.Context, encryptCode string) (*Log, error) {
+	if m == nil || m.conn == nil {
+		return nil, errors.New("model or database connection is nil")
+	}
+
 	return nil, nil
 }
 
