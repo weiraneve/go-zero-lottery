@@ -12,7 +12,7 @@ type (
 	// and implement the added methods in customLogModel.
 	LogModel interface {
 		logModel
-		FindOneByEncryptCode(ctx context.Context) (*Log, error)
+		FindOneByEncryptCode(ctx context.Context, encryptCode string) (*Log, error)
 		withSession(session sqlx.Session) LogModel
 	}
 
@@ -21,7 +21,7 @@ type (
 	}
 )
 
-func (m *customLogModel) FindOneByEncryptCode(ctx context.Context) (*Log, error) {
+func (m *customLogModel) FindOneByEncryptCode(ctx context.Context, encryptCode string) (*Log, error) {
 	return nil, nil
 }
 
