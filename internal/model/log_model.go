@@ -3,6 +3,7 @@ package model
 import (
 	"context"
 	"errors"
+	"fmt"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
 )
 
@@ -27,7 +28,18 @@ func (m *customLogModel) FindOneByEncryptCode(ctx context.Context, encryptCode s
 		return nil, errors.New("model or database connection is nil")
 	}
 
-	return nil, nil
+	var log *Log
+	query := fmt.Sprintf("select %s from %s where `encrypt_code` = ?", logRows, m.table)
+	err := m.conn.QueryRowCtx(ctx, &log, query, encryptCode)
+	if err != nil {
+		return nil, err
+	}
+
+	if log == nil {
+		return nil, ErrNotFound
+	}
+
+	return log, nil
 }
 
 // NewLogModel returns a model for the database table.
