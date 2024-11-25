@@ -25,7 +25,10 @@ func NewLogLogic(ctx context.Context, svcCtx *svc.ServiceContext) *LogLogic {
 }
 
 func (l *LogLogic) Log(req *types.LogRequest) (resp *types.LogResponse, err error) {
-	// todo: add your logic here and delete this line
+	_, err = l.svcCtx.LogModel.FindOneByEncryptCode(l.ctx, req.EncryptCode)
+	if err != nil {
+		return nil, err
+	}
 
 	return
 }
