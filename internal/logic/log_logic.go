@@ -30,5 +30,5 @@ func (l *LogLogic) Log(req *types.LogRequest) (resp *types.LogResponse, err erro
 		return nil, err
 	}
 
-	return
+	return &types.LogResponse{}, nil
 }
