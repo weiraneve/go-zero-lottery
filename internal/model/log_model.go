@@ -29,7 +29,7 @@ func (m *customLogModel) FindOneByEncryptCode(ctx context.Context, encryptCode s
 	}
 
 	var log *Log
-	query := fmt.Sprintf("select %s from %s where `encrypt_code` = ?", logRows, m.table)
+	query := fmt.Sprintf("SELECT %s FROM %s WHERE `encrypt_code` = ?", logRows, m.table)
 	err := m.conn.QueryRowCtx(ctx, &log, query, encryptCode)
 	if err != nil {
 		return nil, err
