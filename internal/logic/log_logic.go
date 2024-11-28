@@ -24,7 +24,6 @@ func NewLogLogic(ctx context.Context, svcCtx *svc.ServiceContext) *LogLogic {
 }
 
 func (l *LogLogic) Log(req *types.LogRequest) (resp *types.LogResponse, err error) {
-	// todo need find all logs by encrypt code
 	_, err = l.svcCtx.LogModel.FindOneByEncryptCode(l.ctx, req.EncryptCode)
 	if err != nil {
 		return nil, err
