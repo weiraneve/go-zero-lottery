@@ -6,6 +6,8 @@ database ?=
 table ?=
 cache ?=
 
+# cache?=-c
+
 .PHONY: init
 # 初始化开发环境，安装依赖工具
 init:
