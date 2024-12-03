@@ -18,7 +18,7 @@ func NewServiceContext(c config.Config) *ServiceContext {
 
 	return &ServiceContext{
 		Config:    c,
-		HeroModel: model.NewHeroModel(conn),
+		HeroModel: model.NewHeroModel(conn, c.Cache),
 		TeamModel: model.NewTeamModel(conn),
 		LogModel:  model.NewLogModel(conn),
 	}
