@@ -46,6 +46,12 @@ func (l *PickLogic) Pick(req *types.PickRequest) (resp *types.PickResponse, err 
 		return nil, errors.New("team not found, please check your encryptCode")
 	}
 
+	if !team.PickContent.Valid {
+		return &types.PickResponse{
+			Data: team.PickContent.String,
+		}, nil
+	}
+
 	heroes, err := l.svcCtx.HeroModel.FindGroupIsNotPick(l.ctx)
 	if err != nil {
 		return nil, errors.New("heroes not found")
