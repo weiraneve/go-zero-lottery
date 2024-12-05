@@ -5,6 +5,7 @@ import (
 	"errors"
 	"lottery/internal/model"
 	"strings"
+	"time"
 
 	"lottery/internal/svc"
 	"lottery/internal/types"
@@ -63,6 +64,16 @@ func (l *PickLogic) Pick(req *types.PickRequest) (resp *types.PickResponse, err 
 	}
 
 	result := strings.Join(names, ",")
+
+	log := &model.Log{
+		TeamId:    team.Id,
+		PickGroup: result,
+		Time:      time.Now(),
+	}
+	_, err = l.svcCtx.LogModel.Insert(l.ctx, log)
+	if err != nil {
+		return nil, err
+	}
 
 	return &types.PickResponse{
 		Data: result,
