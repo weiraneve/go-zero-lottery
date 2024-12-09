@@ -63,6 +63,8 @@ func (l *PickLogic) Pick(req *types.PickRequest) (resp *types.PickResponse, err 
 		names[i] = hero.Name
 	}
 
+	// todo add find pick result and update hero table
+
 	result := strings.Join(names, ",")
 
 	log := &model.Log{
