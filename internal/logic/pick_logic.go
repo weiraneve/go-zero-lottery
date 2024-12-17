@@ -63,7 +63,13 @@ func (l *PickLogic) Pick(req *types.PickRequest) (resp *types.PickResponse, err 
 		names[i] = hero.Name
 	}
 
-	// todo add find pick result and update hero table
+	for _, hero := range heroes {
+		hero.IsPick = 1
+		err := l.svcCtx.HeroModel.Update(l.ctx, hero)
+		if err != nil {
+			return nil, errors.New("heroes update failed")
+		}
+	}
 
 	result := strings.Join(names, ",")
 
