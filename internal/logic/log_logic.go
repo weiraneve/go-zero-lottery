@@ -2,6 +2,8 @@ package logic
 
 import (
 	"context"
+	"errors"
+	"lottery/internal/model"
 	"lottery/internal/svc"
 	"lottery/internal/types"
 
@@ -26,6 +28,13 @@ func NewLogLogic(ctx context.Context, svcCtx *svc.ServiceContext) *LogLogic {
 func (l *LogLogic) Log(req *types.LogRequest) (resp *types.LogResponse, err error) {
 	_, err = l.svcCtx.LogModel.FindOneByEncryptCode(l.ctx, req.EncryptCode)
 	if err != nil {
+		if errors.Is(err, model.ErrNotFound) {
+			logx.Errorw("log not found",
+				logx.Field("encrypt_code", req.EncryptCode),
+				logx.Field("error", err),
+			)
+			return nil, errors.New("team not found, please check your encrypt code")
+		}
 		return nil, err
 	}
 
