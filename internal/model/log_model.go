@@ -14,7 +14,6 @@ type (
 	// and implement the added methods in customLogModel.
 	LogModel interface {
 		logModel
-		FindOneByEncryptCode(ctx context.Context, encryptCode string) (*Log, error)
 		withSession(session sqlx.Session) LogModel
 	}
 
@@ -22,25 +21,6 @@ type (
 		*defaultLogModel
 	}
 )
-
-func (m *customLogModel) FindOneByEncryptCode(ctx context.Context, encryptCode string) (*Log, error) {
-	if m == nil || m.conn == nil {
-		return nil, errors.New("model or database connection is nil")
-	}
-
-	var log *Log
-	query := fmt.Sprintf("SELECT %s FROM %s WHERE `encrypt_code` = ?", logRows, m.table)
-	err := m.conn.QueryRowCtx(ctx, &log, query, encryptCode)
-	if err != nil {
-		return nil, err
-	}
-
-	if log == nil {
-		return nil, ErrNotFound
-	}
-
-	return log, nil
-}
 
 func (m *customLogModel) FindAllByEncryptCode(ctx context.Context, encryptCode string) ([]*Log, error) {
 	if m == nil || m.conn == nil {
