@@ -1,6 +1,8 @@
 package model
 
 import (
+	"context"
+	"fmt"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
 )
 
@@ -11,6 +13,7 @@ type (
 	// and implement the added methods in customLogModel.
 	LogModel interface {
 		logModel
+		FindTeamsByTeamID(ctx context.Context, teamID int64) ([]*Log, error)
 		withSession(session sqlx.Session) LogModel
 	}
 
@@ -23,6 +26,20 @@ type (
 func NewLogModel(conn sqlx.SqlConn) LogModel {
 	return &customLogModel{
 		defaultLogModel: newLogModel(conn),
+	}
+}
+
+func (m *defaultLogModel) FindTeamsByTeamID(ctx context.Context, teamID int64) ([]*Log, error) {
+	query := fmt.Sprintf("select %s from %s where `team_id` = ?", logRows, m.table)
+	var resp []*Log
+	err := m.conn.QueryRowsCtx(ctx, &resp, query, teamID)
+	switch err {
+	case nil:
+		return resp, nil
+	case sqlx.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
 	}
 }
 
