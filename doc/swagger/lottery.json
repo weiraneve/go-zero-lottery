@@ -17,7 +17,7 @@
     "application/json"
   ],
   "paths": {
-    "/": {
+    "/api/": {
       "post": {
         "summary": "Pick a team by encryptCode",
         "operationId": "Pick",
@@ -44,7 +44,7 @@
         ]
       }
     },
-    "/log": {
+    "/api/log": {
       "post": {
         "summary": "Pick a team by encryptCode",
         "operationId": "Log",

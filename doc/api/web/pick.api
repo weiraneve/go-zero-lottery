@@ -7,6 +7,9 @@ info (
 	version: "1.0"
 )
 
+@server (
+	prefix: /api
+)
 service lottery {
 	@doc (
 		summary: "Pick a team by encryptCode"

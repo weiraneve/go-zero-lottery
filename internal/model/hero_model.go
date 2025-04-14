@@ -36,7 +36,7 @@ func (m *customHeroModel) FindGroupIsNotPick(ctx context.Context) ([]*Hero, erro
 	}
 
 	var heroes []*Hero
-	query := fmt.Sprintf("select %s from %s where is_pick = 0 limit 2 for update",
+	query := fmt.Sprintf("SELECT %s FROM %s WHERE is_pick = 0 ORDER BY RAND() LIMIT 2 FOR UPDATE",
 		heroRows, m.table)
 	err := m.QueryRowsNoCacheCtx(ctx, &heroes, query)
 	if err != nil {

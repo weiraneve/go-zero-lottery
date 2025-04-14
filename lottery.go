@@ -4,8 +4,6 @@ import (
 	"flag"
 	"fmt"
 	"github.com/zeromicro/go-zero/core/service"
-	"net/http"
-
 	"lottery/internal/config"
 	"lottery/internal/handler"
 	"lottery/internal/svc"
@@ -29,7 +27,7 @@ func main() {
 	ctx := svc.NewServiceContext(c)
 
 	// http服务
-	httpServer := rest.MustNewServer(c.RestConf, rest.WithCors(), rest.WithFileServer("/api/file/v1/static", http.Dir("static")))
+	httpServer := rest.MustNewServer(c.RestConf, rest.WithCors())
 	handler.RegisterHandlers(httpServer, ctx)
 	serviceGroup.Add(httpServer)
 
