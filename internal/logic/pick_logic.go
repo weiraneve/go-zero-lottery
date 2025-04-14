@@ -47,9 +47,11 @@ func (l *PickLogic) Pick(req *types.PickRequest) (resp *types.PickResponse, err 
 		return nil, errors.New("team not found, please check your encryptCode")
 	}
 
-	if !team.PickContent.Valid {
+	if team.PickContent.Valid {
 		return &types.PickResponse{
-			Data: team.PickContent.String,
+			TeamId: team.Id,
+			Data:   team.PickContent.String,
+			Time:   team.UpdateTime.Time.String(),
 		}, nil
 	}
 
@@ -81,6 +83,13 @@ func (l *PickLogic) Pick(req *types.PickRequest) (resp *types.PickResponse, err 
 	_, err = l.svcCtx.LogModel.Insert(l.ctx, log)
 	if err != nil {
 		return nil, err
+	}
+
+	team.IsPicked = 1
+	team.PickContent.String = result
+	err = l.svcCtx.TeamModel.Update(l.ctx, team)
+	if err != nil {
+		return nil, errors.New("team update failed")
 	}
 
 	return &types.PickResponse{
